@@ -4,8 +4,8 @@ import com.codecool.marsexploration.data.Coordinate;
 import java.util.*;
 public class MapUtil {
 
-    public static List<Coordinate> getPossibleMoves(int x, int y, Set<Coordinate> currentCoordinates,
-                                                    int mapDimension) {
+    public static List<Coordinate> getAdjacentFreeSpots(int x, int y, Set<Coordinate> currentCoordinates,
+                                                        int mapDimension) {
         List<Coordinate> moves = new ArrayList<>();
 
         int[][] directions = {

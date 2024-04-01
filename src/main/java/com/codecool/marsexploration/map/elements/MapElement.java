@@ -8,7 +8,4 @@ public interface MapElement {
 
     void placeOnMap(String[][] mapGrid, Coordinate coordinate);
 
-
-
-
 }

@@ -1,15 +1,16 @@
 package com.codecool.marsexploration.map;
-import com.codecool.marsexploration.map.elements.*;
+
 import com.codecool.marsexploration.data.Coordinate;
+import com.codecool.marsexploration.map.elements.Mountain;
+import com.codecool.marsexploration.map.elements.Pit;
+import com.codecool.marsexploration.map.elements.ResourceElement;
+import com.codecool.marsexploration.map.elements.TerrainElement;
 import com.codecool.marsexploration.util.MapUtil;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-
 import java.util.*;
 
 public class Map {
@@ -25,8 +26,8 @@ public class Map {
     public void generateMapElements() {
         List<Mountain> mountains = placeMountains();
         List<Pit> pits = placePits();
-        placeMinerals(mountains,config.getMapWidth()/10);
-        placeWaterPockets(pits,config.getMapWidth()/10);
+        placeMinerals(mountains);
+        placeWaterPockets(pits);
 
     }
 
@@ -135,13 +136,13 @@ public class Map {
         return minArea + random.nextInt(maxArea - minArea + 1);
     }
 
-    private void placeMinerals(List<Mountain> mountains, int numberOfMinerals) {
-        numberOfMinerals = config.getNumberOfMinerals();
+    private void placeMinerals(List<Mountain> mountains) {
+        int numberOfMinerals = config.getNumberOfMinerals();
         placeResourceElement(mountains, numberOfMinerals, "*");
     }
 
-    public void placeWaterPockets(List<Pit>pits, int numberOfWaterPockets) {
-        numberOfWaterPockets = config.getNumberOfWaterPockets();
+    public void placeWaterPockets(List<Pit>pits) {
+        int numberOfWaterPockets = config.getNumberOfWaterPockets();
         placeResourceElement(pits, numberOfWaterPockets, "~");
     }
 
@@ -151,13 +152,11 @@ public class Map {
         while (placedResources < numberOfResources) {
             TerrainElement terrainElement = getRandomTerrainElement(terrainElements);
             List<Coordinate> adjacentCoordinates = new ArrayList<>();
-            for (Coordinate terrainElementCoordinate : terrainElement.getCoordinates()) {
-                List<Coordinate> adjacent = MapUtil.getPossibleMoves(terrainElementCoordinate.x(), terrainElementCoordinate.y(), new HashSet<>(), config.getMapWidth());
-                for (Coordinate coord : adjacent) {
-                    if (mapGrid[coord.x()][coord.y()] == null) {
-                        adjacentCoordinates.add(coord);
-                    }
-                }
+            Set<Coordinate> terrainElementCoordinates = terrainElement.getCoordinates();
+            for (Coordinate terrainElementCoordinate : terrainElementCoordinates) {
+                List<Coordinate> adjacentFreeSpots = MapUtil.getAdjacentFreeSpots(terrainElementCoordinate.x(),
+                        terrainElementCoordinate.y(), terrainElementCoordinates, config.getMapWidth());
+                adjacentCoordinates.addAll(adjacentFreeSpots);
             }
 
             if (!adjacentCoordinates.isEmpty()) {
@@ -195,12 +194,11 @@ public class Map {
     public void writeMapToFile() {
         String mapString = mapToString();
         String fileName = config.getFileName() + ".txt";
-        Path outputPath = Paths.get("src" + File.separator + "main" + File.separator + "resources"
-                + File.separator + "generated_maps" +  File.separator + fileName);
+        Path outputPath = Paths.get("src","main", "resources", "generated_maps", fileName);
 
         try {
             Files.write(outputPath, mapString.getBytes());
-            System.out.println("Map saved to file: " + fileName);
+            System.out.println("Map has been successfully generated and saved to the file: " + fileName);
         } catch (IOException e) {
             System.err.println("Error writing map to file: " + fileName);
             e.printStackTrace();

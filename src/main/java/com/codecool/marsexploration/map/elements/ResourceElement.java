@@ -24,7 +24,7 @@ public abstract class ResourceElement implements MapElement {
 
         for (TerrainElement terrainElement : terrainElements) {
             for (Coordinate coordinate : terrainElement.getCoordinates()) {
-                List<Coordinate> adjacentCoordinates = MapUtil.getPossibleMoves(coordinate.x(), coordinate.y(),
+                List<Coordinate> adjacentCoordinates = MapUtil.getAdjacentFreeSpots(coordinate.x(), coordinate.y(),
                         new HashSet<>(), mapDimension);
                 for (Coordinate adjacentCoordinate : adjacentCoordinates) {
                     if (!isCoordinateOccupied(adjacentCoordinate, terrainElements)) {
@@ -55,16 +55,14 @@ public abstract class ResourceElement implements MapElement {
     @Override
     public boolean canBePlaced(String[][] mapGrid, Coordinate coordinate) {
         // Check if the resource element can be placed at the given coordinate without overlapping other elements.
-        return mapGrid[coordinate.x()][coordinate.y()] == null;
+        return mapGrid[coordinate.y()][coordinate.x()] == null;
     }
 
     @Override
     public void placeOnMap(String[][] mapGrid, Coordinate coordinate) {
         // Place the resource element on the map grid at the given coordinate.
         // Update the map grid with the resource element's coordinate.
-        mapGrid[coordinate.x()][coordinate.y()] = this.symbol;
+        mapGrid[coordinate.y()][coordinate.x()] = this.symbol;
     }
-
-
 
 }

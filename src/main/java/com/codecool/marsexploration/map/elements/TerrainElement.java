@@ -47,7 +47,7 @@ public abstract class TerrainElement implements MapElement {
         int maxSameDirectionCount = 2;
 
         for (int i = 1; i < area; i++) {
-            List<Coordinate> possibleMoves = MapUtil.getPossibleMoves(x, y, coordinates, mapDimension);
+            List<Coordinate> possibleMoves = MapUtil.getAdjacentFreeSpots(x, y, coordinates, mapDimension);
             if (possibleMoves.isEmpty()) {
                 break;
             }
@@ -83,7 +83,7 @@ public abstract class TerrainElement implements MapElement {
         Set<Coordinate> elementCoordinates = this.getCoordinates();
         for (Coordinate elementCoordinate : elementCoordinates) {
             if (!isCoordinateValid(elementCoordinate, mapGrid.length)
-                    || mapGrid[elementCoordinate.x()][elementCoordinate.y()] != null) {
+                    || mapGrid[elementCoordinate.y()][elementCoordinate.x()] != null) {
                 return false;
             }
         }
@@ -94,7 +94,7 @@ public abstract class TerrainElement implements MapElement {
     public void placeOnMap(String[][] mapGrid, Coordinate coordinate) {
         Set<Coordinate> elementCoordinates = this.getCoordinates();
         for (Coordinate elementCoordinate : elementCoordinates) {
-            mapGrid[elementCoordinate.x()][elementCoordinate.y()] = this.symbol;
+            mapGrid[elementCoordinate.y()][elementCoordinate.x()] = this.symbol;
         }
     }
 
