@@ -17,4 +17,12 @@ Run the `Application` class (which is the main class) to start the application. 
 - Extensibility and Scalability: Designed with the principles of SOLID, SLAP, and YAGNI, facilitating future enhancements and maintenance.
 
 ## Screenshot
+Below is an example of a generated Mars map. The screenshot includes various resources and landforms represented by symbols, as described in the legend:
+
+- `^` : Mountain
+- `#` : Pit
+- `*` : Mineral
+- `~` : Water
+
+
 ![Example of a Generated Mars Map](./assets/mars_map_example.jpg)
